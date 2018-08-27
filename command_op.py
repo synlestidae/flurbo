@@ -13,6 +13,7 @@ class CommandOp:
     def run(self):
         args = list(self.command)
         args.extend(self.params)
+        print("Running: %s" % args.join(' '))
         self.exit_code = subprocess.call(args)
         pass 
 
