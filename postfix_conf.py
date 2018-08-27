@@ -1,6 +1,8 @@
 import os
 import re
 
+from config_file_op import ConfigFileOp
+
 class PostfixConf: 
     def __init__(self, path, **vals):
         self.path = path
@@ -95,3 +97,47 @@ class RawLine:
 
     def __str__(self):
         return self.line
+
+def relay_config(host, domain, dst_host, cert_op):
+    return ConfigFileOp('/etc/postfix/main.cf', PostfixConf, 
+        inet_interfaces = 'loopback-only',
+        myorigin = host, 
+        mydomain = domain,
+        myhostname = host,
+        mydestination = '',
+        relayhost = dst_host,
+        local_transport='error= local delivery disabled',
+        # Still need ssh shit to work
+        smtpd_use_tls= 'yes',
+        smtpd_tls_cert_file = cert_op.cert_path,
+        smtpd_tls_key_file = cert_op.key_path,
+        smtpd_tls_security_level = 'encrypt',
+        smtpd_tls_auth_only='yes',
+        smtpd_recipient_restrictions = '''permit_sasl_authenticated,
+            reject_invalid_hostname,
+            reject_unknown_recipient_domain,
+            reject_unauth_destination,
+            reject_rbl_client sbl.spamhaus.org,
+            permit'''
+    )
+
+def normal_config(host, domain, username):
+    return ConfigFileOp('/etc/postfix/main.cf', PostfixConf, 
+        myhostname = host,
+        mydomain = domain,
+        myorigin = host, 
+        mydestination = domain,
+        home_mailbox="Maildir/", 
+        virtual_alias_maps= 'hash:/etc/postfix/virtual',
+        smtpd_use_tls= 'yes',
+        smtpd_tls_cert_file = cert_op.cert_path,
+        smtpd_tls_key_file = cert_op.key_path,
+        smtpd_tls_security_level = 'encrypt',
+        smtpd_tls_auth_only='yes',
+        smtpd_recipient_restrictions = '''permit_sasl_authenticated,
+            reject_invalid_hostname,
+            reject_unknown_recipient_domain,
+            reject_unauth_destination,
+            reject_rbl_client sbl.spamhaus.org,
+            permit'''
+    )

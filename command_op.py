@@ -11,8 +11,8 @@ class CommandOp:
         return True
 
     def run(self):
-        args = list(command)
-        args.extend(params)
+        args = list(self.command)
+        args.extend(self.params)
         self.exit_code = subprocess.call(args)
         pass 
 

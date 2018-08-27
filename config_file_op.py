@@ -28,3 +28,4 @@ class ConfigFileOp:
 
     def step_name(self):
         return "write config file %s" % self.path
+
