@@ -16,7 +16,7 @@ from postfix_conf import PostfixConf, relay_config
 from cert_op import CertOp
 from space_conf import SpaceConf
 
-print args
+print(args)
 
 domain = args.domain
 host = args.host
@@ -42,7 +42,7 @@ commands = [
 def main():
     for c in commands:
         if not c.check_ready():
-            print("Cannot run step '%s'. It is not ready or some prerequesite is not satisfied" % c.step_name())
+            print(("Cannot run step '%s'. It is not ready or some prerequesite is not satisfied" % c.step_name()))
         try:
             c.run()
         except Exception as e:
@@ -55,7 +55,7 @@ def main():
             return
 
 def show_step_err(c):
-    print("Step '%s' failed. Cannot continue, sorry" % c.step_name())
+    print(("Step '%s' failed. Cannot continue, sorry" % c.step_name()))
 
 if __name__ == '__main__':
     main()
