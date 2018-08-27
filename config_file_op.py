@@ -18,7 +18,6 @@ class ConfigFileOp:
             return True
 
     def run(self):
-        print("Modifying config file at %s" % self.path)
         with self.file_strategy(self.path) as f:
             for k in self.config_dict:
                 f[k] = self.config_dict

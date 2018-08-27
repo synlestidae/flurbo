@@ -40,7 +40,9 @@ commands = [
 ]
 
 def main():
+    step = 1
     for c in commands:
+        print("Step (%d) %s" % (step, c.step_name()))
         if not c.check_ready():
             print(("Cannot run step '%s'. It is not ready or some prerequesite is not satisfied" % c.step_name()))
         try:
@@ -53,6 +55,7 @@ def main():
         if not c.was_success():
             show_step_err(c)
             return
+        step += 1
 
 def show_step_err(c):
     print(("Step '%s' failed. Cannot continue, sorry" % c.step_name()))
