@@ -30,6 +30,8 @@ cert_op = CertOp(host)
 config_postfix = relay_config(host, domain, dest, cert_op)
 
 commands = [
+    cmd('add-apt-repository ppa:certbot/certbot'),
+    cmd('apt-get update'),
     cmd('apt-get install certbot'),
     cert_op,
     cmd('apt-get install postfix'),
