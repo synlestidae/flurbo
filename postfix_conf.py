@@ -35,7 +35,7 @@ class PostfixConf:
 
     def __setitem__(self, key, value):
         for row in self.vals:
-            if row.key is not None and row.key == pos:
+            if row.key is not None and row.key == key:
                 row.value = value
                 return
 
