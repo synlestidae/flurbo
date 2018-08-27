@@ -1,15 +1,19 @@
+import subprocess
+
 class CommandOp:
     def __init__(self, command, params):
-        pass
+        self.command = command
+        self.params = params
+        self.exit_code = None
 
     def check_ready(self):
-        pass
+        return True
 
     def run(self):
+        args = list(command)
+        args.extend(params)
+        self.exit_code = subprocess.call(args)
         pass 
 
     def was_success(self):
-        pass
-
-    def handle_error(self):
-        pass
+        return self.exit_code == 0
