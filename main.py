@@ -41,3 +41,15 @@ commands = [
     cmd('systemctl restart postfix'),
     cmd('ufw allow Postfix'),
 ]
+
+def main():
+    for c in commands:
+        if not c.check_ready():
+            print("Cannot run step '%s'. It is not ready or some prerequesite is not satisfied", c.step_name())
+        c.run()
+        if not c.was_success():
+            return
+
+if __name__ == '__main__':
+    main()
+

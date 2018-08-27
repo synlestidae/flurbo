@@ -19,3 +19,7 @@ class CertOp:
     def was_success(self):
         return self.bot_command.was_success()
         pass
+
+    def step_name(self):
+        return "configure certificate for %s" % self.domain
+

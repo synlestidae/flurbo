@@ -18,3 +18,6 @@ class CreateDirOp:
 
     def was_success(self):
         self.progress < len(self.dirs)
+
+    def step_name(self):
+        return 'create directories %s' % ', '.join(self.dirs)

@@ -11,6 +11,7 @@ class ConfigFileOp:
         try:
             f = open(self.path, 'r')
         except IOError as e:
+            print(e)
             return False
         finally:
             f.close()
@@ -24,3 +25,6 @@ class ConfigFileOp:
     def was_success(self):
         with self.file_strategy(self.path) as f:
             return all([f[k] == self.config_dict[k] for k in f])
+
+    def step_name(self):
+        return "write config file %s" % self.path

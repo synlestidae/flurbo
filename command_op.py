@@ -7,6 +7,7 @@ class CommandOp:
         self.exit_code = None
 
     def check_ready(self):
+        ## Todo check that command exists e.g. `which command` returns something
         return True
 
     def run(self):
@@ -17,3 +18,6 @@ class CommandOp:
 
     def was_success(self):
         return self.exit_code == 0
+
+    def step_name(self):
+        return "run command %s" % self.command
