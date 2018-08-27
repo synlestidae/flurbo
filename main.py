@@ -19,24 +19,26 @@ def cmd(cmd):
 
 cert_op = CertOp(hostname)
 
+config_postfix = ConfigFileOp('/etc/postfix/main.cf', PostfixConf, 
+    home_mailbox="Maildir/", 
+    virtual_alias_maps= 'hash:/etc/postfix/virtual',
+    smtpd_use_tls= 'yes',
+    smtpd_tls_cert_file = cert_op.cert_path,
+    smtpd_tls_key_file = cert_op.key_path,
+    smtpd_tls_security_level = 'encrypt',
+    smtpd_tls_auth_only='yes',
+    smtpd_recipient_restrictions = '''permit_sasl_authenticated,
+        reject_invalid_hostname,
+        reject_unknown_recipient_domain,
+        reject_unauth_destination,
+        reject_rbl_client sbl.spamhaus.org,
+        permit'''
+)
+
 commands = [
     cert_op,
     cmd('apt-get install postfix'),
-    ConfigFileOp('/etc/postfix/main.cf', PostfixConf, 
-        home_mailbox="Maildir/", 
-        virtual_alias_maps= 'hash:/etc/postfix/virtual',
-        smtpd_use_tls= 'yes',
-        smtpd_tls_cert_file = cert_op.cert_path,
-        smtpd_tls_key_file = cert_op.key_path,
-        smtpd_tls_security_level = 'encrypt',
-        smtpd_tls_auth_only='yes',
-        smtpd_recipient_restrictions = '''permit_sasl_authenticated,
-            reject_invalid_hostname,
-            reject_unknown_recipient_domain,
-            reject_unauth_destination,
-            reject_rbl_client sbl.spamhaus.org,
-            permit'''
-    ),
+    config_postfix,
     ConfigFileOp('/etc/postfix/virtual', SpaceConf, **email_addrs),
     cmd('systemctl restart postfix'),
     cmd('ufw allow Postfix'),
@@ -45,9 +47,10 @@ commands = [
 def main():
     for c in commands:
         if not c.check_ready():
-            print("Cannot run step '%s'. It is not ready or some prerequesite is not satisfied", c.step_name())
+            print("Cannot run step '%s'. It is not ready or some prerequesite is not satisfied" % c.step_name())
         c.run()
         if not c.was_success():
+            print("Step '%s' failed. Cannot continue, sorry" % c.step_name())
             return
 
 if __name__ == '__main__':
