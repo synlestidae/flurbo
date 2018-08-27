@@ -1,8 +1,11 @@
+import re
+
 from command_op import CommandOp
 from create_dir_op import CreateDirOp
 from config_file_op import ConfigFileOp
 from postfix_conf import PostfixConf
 from cert_op import CertOp
+from space_conf import SpaceConf
 
 email_addrs = {
     "mate@antunovic.nz": "mate"
@@ -11,7 +14,10 @@ email_addrs = {
 domain = 'antunovic.nz'
 hostname = 'mail.antunovic.nz'
 
-cert_op = CertOp(hostname),
+def cmd(cmd):
+    return CommandOp(cmd[0], re.split('\s+', cmd)[1:])
+
+cert_op = CertOp(hostname)
 
 commands = [
     cert_op,
@@ -34,9 +40,4 @@ commands = [
     ConfigFileOp('/etc/postfix/virtual', SpaceConf, **email_addrs),
     cmd('systemctl restart postfix'),
     cmd('ufw allow Postfix'),
-    LetsEncrypt(domain)
 ]
-
-def cmd(cmd):
-    return CommandOpcmd.split(re.compile('\s+'))
-

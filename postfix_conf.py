@@ -1,18 +1,30 @@
-class PostfixConfig: 
-    def __init__(self, path):
+import os
+import re
+
+class PostfixConf: 
+    def __init__(self, path, **vals):
         self.path = path
         self.vals = []
+        for k in vals:
+            self.vals.append(self.append_kv(k, vals[k]))
 
     def __enter__(self):
         self.lines = []
+
+        if not os.path.exists(self.path):
+            return self
+
         with open(self.path, 'r') as f:
             for row in f:
-                self.vals.push(self.parse_row(row))
+                self.vals.append(self.parse_row(row))
+
+        return self
 
     def __exit__(self, ty, value, traceback):
         with open(self.path, 'w') as f:
             for row in self.vals:
-                f.write(str(row))
+                if row is not None and row.key is not None:
+                    f.write(str(row))
 
     def __getitem__(self, pos):
         for row in self.vals:
@@ -25,6 +37,9 @@ class PostfixConfig:
                 row.value = value
                 return
 
+        self.append_kv(key, value)
+
+    def append_kv(self, key, value):
         self.vals.append(ConfigParam(key, value))
 
     def parse_row(self, row):
@@ -62,12 +77,12 @@ class ConfigParam:
             match = regex.match(kv_text)
             if match:
                 key, value = match.groups()
-                return ConfigParam(key, value)
+                return ConfigParam(key, value.trim())
         except ValueError:
             return None
 
     def __str__(self):
-        return "%s = %s %s" % (self.key, self.value, str(self.comment) if self.comment else '')
+        return "%s = %s%s" % (self.key, self.value, str(self.comment).trim() if self.comment is not None else '')
 
 class RawLine:
     def __init__(self, line):

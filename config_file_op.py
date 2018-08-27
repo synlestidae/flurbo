@@ -11,7 +11,6 @@ class ConfigFileOp:
         try:
             f = open(self.path, 'r')
         except IOError as e:
-            print(e)
             return False
         finally:
             f.close()
