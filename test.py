@@ -23,6 +23,14 @@ class TestPostfix(unittest.TestCase):
         with open(TEST_PATH, 'r') as f:
             self.assertEqual('smtpd_use_tls = yes', f.readline())
 
+    def test_sets_two_properties_files(self):
+        with PostfixConf(TEST_PATH) as p:
+            p['smtpd_use_tls'] = 'yes' 
+            p['myhostname'] = 'example.com' 
+        with open(TEST_PATH, 'r') as f:
+            self.assertEqual('smtpd_use_tls = yes', f.readline())
+            self.assertEqual('myhostname = example.com', f.readline())
+
     def setUp(self):
         remove_file(TEST_PATH)
 
