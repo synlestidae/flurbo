@@ -29,8 +29,8 @@ class PostfixConf:
         lines = []
         f = open(self.path, 'w')
         for row in self.vals:
-            row_str = str(row).strip()
             if row is not None and row.key is not None:
+                row_str = str(row).strip()
                 f.write(row_str + "\n")
             elif row is None:
                 f.write("\n")
