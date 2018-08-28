@@ -118,12 +118,7 @@ def relay_config(host, domain, dst_host, cert_op):
         smtpd_tls_key_file = cert_op.key_path,
         smtpd_tls_security_level = 'encrypt',
         smtpd_tls_auth_only='yes',
-        smtpd_recipient_restrictions = '''permit_sasl_authenticated,
-            reject_invalid_hostname,
-            reject_unknown_recipient_domain,
-            reject_unauth_destination,
-            reject_rbl_client sbl.spamhaus.org,
-            permit'''
+        smtpd_recipient_restrictions = 'permit_sasl_authenticated,reject_invalid_hostname,reject_unknown_recipient_domain,reject_unauth_destination,reject_rbl_client sbl.spamhaus.org,permit'
     )
 
 def normal_config(host, domain, username):
