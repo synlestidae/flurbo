@@ -5,12 +5,14 @@ from config_file_op import ConfigFileOp
 
 class PostfixConf: 
     def __init__(self, path, **vals):
+        print("initing this shit", vals.keys())
         self.path = path
         self.vals = []
         for k in vals:
-            self.vals.append(self.append_kv(k, vals[k]))
+            self.append_kv(k, vals[k])
 
     def __enter__(self):
+        print("Entering with %d lines", len(self.vals));
         self.lines = []
 
         if not os.path.exists(self.path):
@@ -20,14 +22,22 @@ class PostfixConf:
             for row in f:
                 self.vals.append(self.parse_row(row))
 
+        print("Entered with %d lines", len(self.vals))
         return self
 
     def __exit__(self, ty, value, traceback):
+        print("Exiting with", self.vals);
         print("Writing %d rows to %s" % (len(self.vals), self.path))
-        with open(self.path, 'w') as f:
-            for row in self.vals:
-                if row is not None and row.key is not None:
-                    f.write(str(row))
+        lines = []
+        f = open(self.path, 'w')
+        for row in self.vals:
+            print (row)
+            if row is not None and row.key is not None:
+                lines.append(str(row))
+            elif row is None:
+                lines.append('')
+        f.writelines(lines)
+        f.close()
 
     def __getitem__(self, pos):
         for row in self.vals:
