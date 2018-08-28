@@ -6,6 +6,9 @@ class CreateDirOp:
         self.progress = 0
         pass
 
+    def should_skip(self):
+        return False
+
     def check_ready(self):
         return True
 

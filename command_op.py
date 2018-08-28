@@ -6,6 +6,9 @@ class CommandOp:
         self.params = params
         self.exit_code = None
 
+    def should_skip(self):
+        return False
+
     def check_ready(self):
         ## Todo check that command exists e.g. `which command` returns something
         return True

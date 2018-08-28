@@ -7,6 +7,9 @@ class ConfigFileOp:
         self.file_strategy = file_strategy
         pass
 
+    def should_skip(self):
+        return False
+
     def check_ready(self):
         try:
             f = open(self.path, 'r')

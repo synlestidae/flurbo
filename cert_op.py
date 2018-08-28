@@ -1,5 +1,6 @@
 import subprocess
 from command_op import CommandOp
+import os
 
 class CertOp:
     def __init__(self, domain, cert_path = "/etc/letsencrypt/live/%s/fullchain.pem", key_path = "/etc/letsencrypt/live/%s/privkey.pem"):
@@ -7,6 +8,9 @@ class CertOp:
         self.bot_command = CommandOp('certbot', ['certonly', '--standalone', '-d', self.domain])
         self.cert_path = cert_path % domain
         self.key_path = key_path % domain
+
+    def should_skip(self):
+        return os.path.exists(self.cert_path) and os.path.exists(self.key_path)
 
     def check_ready(self):
         # can bind to port 80
