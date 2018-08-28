@@ -27,7 +27,12 @@ class ConfigFileOp:
 
     def was_success(self):
         with self.file_strategy(self.path) as f:
-            return all([f[k] == self.config_dict[k] for k in f])
+            for k in self.config_dict:
+                if k is not None and f[k] != self.config_dict[k]: 
+                    print("Expected config '%s' to be '%s', got '%s'" % (k, self.config_dict[k], f[k]))
+                    return False
+
+        return True
 
     def step_name(self):
         return "write config file %s" % self.path
