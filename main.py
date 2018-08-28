@@ -38,7 +38,8 @@ commands = [
     config_postfix,
     #ConfigFileOp('/etc/postfix/virtual', SpaceConf, **email_addrs),
     cmd('systemctl restart postfix'),
-    cmd('ufw allow Postfix'),
+    cmd('ufw allow "Postfix'),
+    CommandOp('ufw', ['allow', 'Postfix SMTPS']) 
 ]
 
 def main():
