@@ -82,12 +82,9 @@ class ConfigParam:
     @staticmethod
     def parse(text):
         try:
-            kv_text, comment = text.split('#', 1)
-            regex = re.compile('([A-Za-z_][A-Za-z0-9]*)\s*=\s*(\S*)')
-            match = regex.match(kv_text)
-            if match:
-                key, value = match.groups()
-                return ConfigParam(key, value.trim())
+            comment = None
+            k, v = text.split('=', 1)
+            return ConfigParam(k.strip(), v.strip())
         except ValueError:
             return None
 

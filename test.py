@@ -30,6 +30,20 @@ class TestPostfix(unittest.TestCase):
             self.assertEqual('smtpd_use_tls = yes', f.readline().strip())
             self.assertEqual('myhostname = example.com', f.readline().strip())
 
+    def test_sets_properties_existing_file(self):
+        with open(TEST_PATH, 'w') as f:
+            f.write("test_val = hello\n")
+
+        with PostfixConf(TEST_PATH) as p:
+            p['smtpd_use_tls'] = 'yes' 
+            p['myhostname'] = 'example.com' 
+            self.assertEqual('hello', p['test_val'])
+
+        with open(TEST_PATH, 'r') as f:
+            self.assertEqual('test_val = hello', f.readline().strip())
+            self.assertEqual('smtpd_use_tls = yes', f.readline().strip())
+            self.assertEqual('myhostname = example.com', f.readline().strip())
+
     def setUp(self):
         remove_file(TEST_PATH)
 
