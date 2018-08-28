@@ -23,6 +23,7 @@ class PostfixConf:
         return self
 
     def __exit__(self, ty, value, traceback):
+        print("Writing %d rows to %s" % (len(self.vals), self.path))
         with open(self.path, 'w') as f:
             for row in self.vals:
                 if row is not None and row.key is not None:
