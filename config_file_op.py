@@ -23,7 +23,7 @@ class ConfigFileOp:
     def run(self):
         with self.file_strategy(self.path) as f:
             for k in self.config_dict:
-                f[k] = self.config_dict
+                f[k] = self.config_dict[k]
 
     def was_success(self):
         with self.file_strategy(self.path) as f:
