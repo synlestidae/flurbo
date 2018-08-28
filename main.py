@@ -45,6 +45,9 @@ def main():
     step = 1
     for c in commands:
         print("Step (%d) %s" % (step, c.step_name()))
+        if c.should_skip():
+            print("Skipping... ")
+            continue
         if not c.check_ready():
             print(("Cannot run step '%s'. It is not ready or some prerequesite is not satisfied" % c.step_name()))
         try:
